@@ -1,0 +1,11 @@
+{
+  "name": "MONEY Love - รายรับรายจ่าย",
+  "short_name": "MONEY Love",
+  "description": "แอปบันทึกรายรับรายจ่ายส่วนตัว",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f8fc",
+  "theme_color": "#155eef",
+  "icons": [{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
