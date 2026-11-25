@@ -1,130 +1,443 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#155eef">
-<meta name="description" content="MONEY Love แอปบันทึกรายรับรายจ่ายส่วนตัว">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1769d2">
+<title>MONEY Love - บันทึกรายรับรายจ่าย</title>
 <link rel="manifest" href="manifest.json">
-<link rel="icon" href="icon.svg" type="image/svg+xml">
-<title>MONEY Love</title>
 <style>
-:root{--blue:#155eef;--blue2:#eaf1ff;--ink:#172b4d;--muted:#667085;--line:#e5eaf2;--bg:#f5f8fc;--green:#039855;--red:#d92d20}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
-header{background:var(--blue);color:white;padding:20px 18px 24px;border-radius:0 0 24px 24px}
-.top{display:flex;align-items:center;gap:11px}.logo{width:42px;height:42px;border-radius:13px;background:white;color:var(--blue);display:grid;place-items:center;font-size:22px;font-weight:800}
-h1{font-size:20px;margin:0}header small{color:#dbeafe}.balance-label{margin-top:22px;color:#dbeafe;font-size:13px}.balance{font-size:32px;font-weight:800;letter-spacing:-1px}
-main{max-width:760px;margin:auto;padding:16px 14px 90px}.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:-2px}
-.card,.panel{background:white;border:1px solid var(--line);border-radius:16px;padding:15px;box-shadow:0 3px 12px #17345b08}
-.label{font-size:12px;color:var(--muted)}.amount{font-size:21px;font-weight:750;margin-top:5px}.income{color:var(--green)}.expense{color:var(--red)}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
-button,.btn{border:0;border-radius:12px;padding:13px 14px;font:inherit;font-weight:650;cursor:pointer}
-.primary{background:var(--blue);color:white}.soft{background:var(--blue2);color:var(--blue)}.danger{background:#fff0ef;color:var(--red)}
-h2{font-size:16px;margin:20px 2px 10px}.panel{margin-bottom:12px}
-form{display:grid;gap:10px}input,select{width:100%;padding:12px;border:1px solid #d5ddea;border-radius:10px;background:white;font:inherit;color:var(--ink)}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tabs{display:flex;gap:8px;margin:12px 0}.tabs button{flex:1}
-.tabs .active{background:var(--blue);color:white}.tabs button:not(.active){background:white;color:var(--muted);border:1px solid var(--line)}
-.item{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}.item:last-child{border:0}
-.dot{width:36px;height:36px;border-radius:11px;background:var(--blue2);display:grid;place-items:center}
-.item-info{flex:1;min-width:0}.item-info strong{display:block;font-size:14px}.item-info small{color:var(--muted);font-size:12px}
-.item-amount{font-weight:750;white-space:nowrap}.empty{text-align:center;color:var(--muted);padding:22px 5px;font-size:13px}
-footer{position:fixed;bottom:0;left:0;right:0;background:#ffffffed;backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:10px max(14px,calc((100% - 730px)/2));display:flex;justify-content:space-around}
-footer button{background:transparent;color:var(--muted);font-size:12px;padding:7px}
-footer button.active{color:var(--blue)}
-.view{display:none}.view.active{display:block}
-.note{font-size:12px;color:var(--muted);line-height:1.55}.tools{display:flex;flex-wrap:wrap;gap:8px}.tools button{font-size:13px}
-.month{font-weight:700;color:var(--blue);font-size:14px}
-@media(min-width:600px){main{padding-top:22px}.cards .card{padding:19px}}
+:root {
+  --blue:#1769d2;
+  --light:#eaf3ff;
+  --bg:#f4f7fc;
+  --text:#243247;
+  --muted:#718096;
+  --green:#15966a;
+  --red:#e05252;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:system-ui,-apple-system,sans-serif;
+}
+header{
+  background:linear-gradient(135deg,#1769d2,#4095ed);
+  color:white;padding:22px 18px 26px;
+  border-radius:0 0 25px 25px;
+}
+header h2{margin:0;font-size:22px}
+header p{margin:5px 0 0;font-size:13px;opacity:.9}
+.container{max-width:650px;margin:auto;padding:15px}
+.balance{
+  background:white;margin-top:-8px;padding:20px;
+  border-radius:18px;box-shadow:0 4px 18px #16365b12;
+}
+.balance small{color:var(--muted)}
+.balance h1{font-size:32px;margin:7px 0;color:var(--blue)}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.card{
+  background:white;border-radius:15px;padding:15px;
+  box-shadow:0 3px 12px #16365b0c;
+}
+.card small{color:var(--muted)}
+.card strong{display:block;font-size:20px;margin-top:6px}
+.green{color:var(--green)}
+.red{color:var(--red)}
+h3{font-size:17px;margin:22px 2px 12px}
+.panel{
+  background:white;padding:16px;border-radius:16px;
+  margin-bottom:13px;box-shadow:0 3px 12px #16365b0b;
+}
+input,select,button{
+  font:inherit;
+}
+input,select{
+  width:100%;padding:12px;border:1px solid #dce4ef;
+  border-radius:10px;background:white;margin:6px 0 13px;
+  color:var(--text);
+}
+label{font-size:13px;color:#526176}
+button{
+  border:0;border-radius:11px;padding:12px 15px;
+  cursor:pointer;font-weight:600;
+}
+.primary{background:var(--blue);color:white;width:100%}
+.secondary{background:var(--light);color:var(--blue)}
+.danger{background:#fff0f0;color:var(--red)}
+.tabs{
+  display:grid;grid-template-columns:repeat(5,1fr);
+  gap:5px;background:white;padding:8px;
+  position:sticky;bottom:0;z-index:5;
+  box-shadow:0 -3px 15px #16365b10;
+}
+.tabs button{
+  background:white;color:#68778d;font-size:11px;
+  padding:9px 2px;border-radius:10px;
+}
+.tabs button.active{background:var(--light);color:var(--blue)}
+.page{display:none}
+.page.active{display:block}
+.item{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:10px;padding:13px 0;border-bottom:1px solid #edf0f5;
+}
+.item:last-child{border:0}
+.item small{display:block;color:var(--muted);font-size:12px;margin-top:4px}
+.amount{font-weight:700;white-space:nowrap}
+.actions{display:flex;gap:5px;margin-top:6px}
+.actions button{font-size:11px;padding:5px 8px}
+.bar-bg{height:9px;background:#edf1f7;border-radius:20px;overflow:hidden;margin:7px 0 13px}
+.bar{height:100%;background:var(--blue);border-radius:20px}
+.muted{color:var(--muted);font-size:13px}
+.empty{text-align:center;padding:25px;color:var(--muted)}
+.goal-progress{height:12px;background:#edf1f7;border-radius:20px;overflow:hidden;margin:10px 0}
+.goal-progress div{height:100%;background:var(--green)}
+footer{text-align:center;color:#9aa6b6;font-size:11px;padding:20px}
 </style>
 </head>
 <body>
+
 <header>
- <div class="top"><div class="logo">฿</div><div><h1>MONEY Love</h1><small>บันทึกวันนี้ เพื่ออนาคตที่ดีขึ้น</small></div></div>
- <div class="balance-label">เงินคงเหลือทั้งหมด</div><div class="balance" id="balance">฿0.00</div>
+  <h2>💙 MONEY Love</h2>
+  <p>บันทึกวันนี้ เพื่อชีวิตการเงินที่ดีในวันหน้า</p>
 </header>
-<main>
- <section id="home" class="view active">
+
+<div class="container">
+
+<section id="home" class="page active">
+  <div class="balance">
+    <small>ยอดคงเหลือทั้งหมด</small>
+    <h1 id="balance">฿0.00</h1>
+    <div class="muted">สรุปข้อมูลตั้งแต่เริ่มบันทึก</div>
+  </div>
   <div class="cards">
-   <div class="card"><div class="label">รายรับเดือนนี้</div><div class="amount income" id="monthIncome">฿0.00</div></div>
-   <div class="card"><div class="label">รายจ่ายเดือนนี้</div><div class="amount expense" id="monthExpense">฿0.00</div></div>
-  </div>
-  <div class="actions"><button class="primary" onclick="openForm('income')">＋ เพิ่มรายรับ</button><button class="danger" onclick="openForm('expense')">－ เพิ่มรายจ่าย</button></div>
-  <h2>รายการล่าสุด</h2><div class="panel" id="recent"></div>
- </section>
- <section id="add" class="view">
-  <h2>บันทึกรายการ</h2>
-  <div class="panel">
-   <div class="tabs"><button id="incomeTab" class="active" onclick="setType('income')">รายรับ</button><button id="expenseTab" onclick="setType('expense')">รายจ่าย</button></div>
-   <form id="entryForm">
-    <label class="label">จำนวนเงิน (บาท)<input id="amount" type="number" min="0.01" step="0.01" placeholder="เช่น 150" required></label>
-    <div class="row">
-     <label class="label">หมวดหมู่<select id="category"></select></label>
-     <label class="label">วันที่<input id="date" type="date" required></label>
+    <div class="card">
+      <small>รายรับเดือนนี้</small>
+      <strong class="green" id="monthIncome">฿0</strong>
     </div>
-    <label class="label">รายละเอียด (ไม่บังคับ)<input id="memo" maxlength="80" placeholder="เช่น ซื้อข้าวกลางวัน"></label>
-    <button class="primary" type="submit">บันทึกรายการ</button>
-   </form>
+    <div class="card">
+      <small>รายจ่ายเดือนนี้</small>
+      <strong class="red" id="monthExpense">฿0</strong>
+    </div>
   </div>
- </section>
- <section id="history" class="view">
-  <h2>ประวัติรายการ</h2><div class="panel"><label class="label">เลือกเดือน<input type="month" id="filterMonth"></label><div id="historyList"></div></div>
- </section>
- <section id="report" class="view">
-  <h2>สรุปรายเดือน</h2><div class="panel">
-   <label class="label">เลือกเดือน<input type="month" id="reportMonth"></label>
-   <div class="row" style="margin-top:12px"><div><div class="label">รายรับ</div><div class="amount income" id="reportIncome">฿0</div></div><div><div class="label">รายจ่าย</div><div class="amount expense" id="reportExpense">฿0</div></div></div>
-   <hr style="border:0;border-top:1px solid var(--line);margin:14px 0"><div class="label">เงินเหลือสุทธิของเดือน</div><div class="amount" id="reportNet">฿0</div>
-   <h2>รายจ่ายแยกตามหมวดหมู่</h2><div id="categoryReport"></div>
+  <h3>รายการล่าสุด</h3>
+  <div class="panel" id="recent"></div>
+  <button class="primary" onclick="showPage('add')">＋ เพิ่มรายการใหม่</button>
+</section>
+
+<section id="add" class="page">
+  <h3 id="formTitle">บันทึกรายการใหม่</h3>
+  <div class="panel">
+    <form id="entryForm">
+      <label>ประเภทรายการ</label>
+      <select id="type">
+        <option value="income">รายรับ</option>
+        <option value="expense">รายจ่าย</option>
+      </select>
+      <label>จำนวนเงิน (บาท)</label>
+      <input id="amount" type="number" min="0.01" step="0.01" placeholder="เช่น 500" required>
+      <label>หมวดหมู่</label>
+      <select id="category"></select>
+      <label>วันที่</label>
+      <input id="date" type="date" required>
+      <label>รายละเอียดเพิ่มเติม</label>
+      <input id="note" type="text" placeholder="เช่น เงินเดือน ซื้ออาหาร">
+      <button class="primary" type="submit">บันทึกรายการ</button>
+      <button class="secondary" type="button" id="cancelEdit" onclick="resetForm()" style="display:none;width:100%;margin-top:8px">ยกเลิกการแก้ไข</button>
+    </form>
   </div>
- </section>
- <section id="settings" class="view">
-  <h2>จัดการข้อมูล</h2><div class="panel">
-   <strong>สำรองและย้ายข้อมูล</strong><p class="note">ข้อมูลบันทึกอยู่ในเบราว์เซอร์ของเครื่องนี้ ควรส่งออกไฟล์สำรองเป็นประจำ โดยเฉพาะก่อนเปลี่ยนเครื่องหรือล้างข้อมูล</p>
-   <div class="tools"><button class="soft" onclick="exportData()">ดาวน์โหลดข้อมูลสำรอง</button><button class="soft" onclick="document.getElementById('importFile').click()">นำเข้าข้อมูลสำรอง</button><input id="importFile" type="file" accept="application/json" hidden></div>
-   <p class="note">การนำเข้าจะแทนที่รายการเดิมในเครื่องนี้</p>
+</section>
+
+<section id="history" class="page">
+  <h3>ประวัติรายการ</h3>
+  <div class="panel">
+    <label>เลือกเดือนที่ต้องการดู</label>
+    <input type="month" id="historyMonth">
+    <div id="historyList"></div>
   </div>
-  <div class="panel"><strong>เกี่ยวกับ MONEY Love</strong><p class="note">เครื่องมือช่วยบันทึกรายรับรายจ่ายส่วนบุคคล ไม่ใช่แอปธนาคาร ข้อมูลไม่ได้ส่งไปยัง MONEY Love หรือผู้ดูแลเพจ</p><button class="danger" onclick="clearData()">ลบข้อมูลทั้งหมดในเครื่องนี้</button></div>
- </section>
-</main>
-<footer>
- <button class="active" data-view="home" onclick="showView('home')">⌂<br>หน้าหลัก</button>
- <button data-view="add" onclick="showView('add')">＋<br>บันทึก</button>
- <button data-view="history" onclick="showView('history')">☷<br>ประวัติ</button>
- <button data-view="report" onclick="showView('report')">▥<br>รายงาน</button>
- <button data-view="settings" onclick="showView('settings')">⚙<br>ตั้งค่า</button>
-</footer>
+</section>
+
+<section id="report" class="page">
+  <h3>รายงานการเงิน</h3>
+  <div class="panel">
+    <label>เลือกเดือน</label>
+    <input type="month" id="reportMonth">
+    <div id="reportContent"></div>
+  </div>
+</section>
+
+<section id="more" class="page">
+  <h3>จัดการเงินและข้อมูล</h3>
+  <div class="panel">
+    <h3 style="margin-top:0">🎯 เป้าหมายการออม</h3>
+    <label>ชื่อเป้าหมาย</label>
+    <input id="goalName" placeholder="เช่น เงินสำรองฉุกเฉิน">
+    <label>จำนวนเงินเป้าหมาย (บาท)</label>
+    <input id="goalTarget" type="number" min="1" placeholder="เช่น 50000">
+    <label>จำนวนเงินที่ออมแล้ว (บาท)</label>
+    <input id="goalSaved" type="number" min="0" placeholder="เช่น 5000">
+    <button class="primary" onclick="saveGoal()">บันทึกเป้าหมาย</button>
+    <div id="goalDisplay" style="margin-top:15px"></div>
+  </div>
+
+  <div class="panel">
+    <h3 style="margin-top:0">📊 งบประมาณรายจ่าย</h3>
+    <label>หมวดหมู่</label>
+    <select id="budgetCategory"></select>
+    <label>งบประมาณต่อเดือน (บาท)</label>
+    <input id="budgetAmount" type="number" min="1" placeholder="เช่น 3000">
+    <button class="primary" onclick="saveBudget()">บันทึกงบประมาณ</button>
+    <div id="budgetDisplay" style="margin-top:15px"></div>
+  </div>
+
+  <div class="panel">
+    <h3 style="margin-top:0">💾 สำรองข้อมูล</h3>
+    <p class="muted">ดาวน์โหลดข้อมูลเก็บไว้ เพื่อป้องกันข้อมูลสูญหาย</p>
+    <button class="primary" onclick="backup()">ดาวน์โหลดข้อมูลสำรอง</button>
+    <label style="display:block;margin-top:18px">นำเข้าข้อมูลสำรอง</label>
+    <input type="file" id="restoreFile" accept=".json,application/json">
+    <button class="secondary" style="width:100%" onclick="restore()">นำเข้าข้อมูล</button>
+  </div>
+</section>
+
+</div>
+
+<nav class="tabs">
+  <button class="active" data-page="home" onclick="showPage('home')">🏠<br>หน้าหลัก</button>
+  <button data-page="add" onclick="showPage('add')">➕<br>บันทึก</button>
+  <button data-page="history" onclick="showPage('history')">📋<br>ประวัติ</button>
+  <button data-page="report" onclick="showPage('report')">📊<br>รายงาน</button>
+  <button data-page="more" onclick="showPage('more')">⚙️<br>เพิ่มเติม</button>
+</nav>
+
+<footer>MONEY Love · วางแผนวันนี้ เพื่ออนาคตที่ดี</footer>
+
 <script>
-const KEY='moneyLoveEntriesV1';
-const cats={income:['เงินเดือน','ค้าขาย','อาชีพเสริม','ดอกเบี้ยและเงินปันผล','รายรับอื่น ๆ'],expense:['อาหารและเครื่องดื่ม','บ้านและที่อยู่อาศัย','รถและการเดินทาง','ค่าน้ำ ค่าไฟ ค่าโทรศัพท์','หนี้สิน','สุขภาพ','ช้อปปิ้ง','ครอบครัว','อื่น ๆ']};
-let type='income', entries=load();
-const $=id=>document.getElementById(id);
-const money=n=>'฿'+Number(n||0).toLocaleString('th-TH',{minimumFractionDigits:2,maximumFractionDigits:2});
-const today=()=>new Date().toISOString().slice(0,10);
-function load(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return []}}
-function save(){localStorage.setItem(KEY,JSON.stringify(entries));render()}
-function monthNow(){return today().slice(0,7)}
-function setType(t){type=t;$('incomeTab').classList.toggle('active',t==='income');$('expenseTab').classList.toggle('active',t==='expense');$('category').innerHTML=cats[t].map(c=>`<option>${esc(c)}</option>`).join('')}
-function openForm(t){setType(t);showView('add')}
-function showView(v){document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id===v));document.querySelectorAll('footer button').forEach(x=>x.classList.toggle('active',x.dataset.view===v));if(v==='history')renderHistory();if(v==='report')renderReport()}
-function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function sum(arr,t){return arr.filter(x=>x.type===t).reduce((a,x)=>a+x.amount,0)}
-function render(){
- const m=monthNow(), mi=entries.filter(x=>x.date.startsWith(m));
- $('balance').textContent=money(sum(entries,'income')-sum(entries,'expense'));
- $('monthIncome').textContent=money(sum(mi,'income'));$('monthExpense').textContent=money(sum(mi,'expense'));
- const latest=[...entries].sort((a,b)=>b.date.localeCompare(a.date)||b.created-b.created).slice(0,6);
- $('recent').innerHTML=latest.length?latest.map(itemHTML).join(''):'<div class="empty">ยังไม่มีรายการ เริ่มบันทึกรายรับหรือรายจ่ายรายการแรกได้เลย</div>';
- renderHistory();renderReport();
+const KEY = "moneyLoveDataV2";
+const oldKey = "moneyLoveData";
+let data = {entries:[],goal:null,budgets:{}};
+
+try {
+  const saved = localStorage.getItem(KEY);
+  if(saved) data = {...data,...JSON.parse(saved)};
+  else {
+    const old = localStorage.getItem(oldKey);
+    if(old) {
+      const parsed = JSON.parse(old);
+      data.entries = Array.isArray(parsed) ? parsed : (parsed.entries || []);
+    }
+  }
+} catch(e) { console.error(e); }
+
+const categories = {
+  income:["เงินเดือน","ค้าขาย","งานเสริม","ดอกเบี้ย/ปันผล","อื่นๆ"],
+  expense:["อาหาร","เดินทาง","ที่พัก/บ้าน","ค่าน้ำค่าไฟ","ช้อปปิ้ง","สุขภาพ","ครอบครัว","หนี้สิน","อื่นๆ"]
+};
+
+let editingId = null;
+const $ = id => document.getElementById(id);
+const money = n => Number(n||0).toLocaleString("th-TH",{minimumFractionDigits:2,maximumFractionDigits:2});
+const today = () => new Date().toLocaleDateString("en-CA");
+const monthNow = () => today().slice(0,7);
+const monthOf = d => String(d||"").slice(0,7);
+
+function saveData(){
+  localStorage.setItem(KEY,JSON.stringify(data));
 }
-function itemHTML(x){return `<div class="item"><div class="dot">${x.type==='income'?'↗':'↘'}</div><div class="item-info"><strong>${esc(x.category)}</strong><small>${esc(x.date)}${x.memo?' · '+esc(x.memo):''}</small></div><div class="item-amount ${x.type==='income'?'income':'expense'}">${x.type==='income'?'+':'−'}${money(x.amount)}</div><button title="ลบรายการ" class="danger" style="padding:7px 9px" onclick="deleteEntry('${x.id}')">×</button></div>`}
-function renderHistory(){if(!$('historyList'))return;const m=$('filterMonth').value||monthNow();const a=entries.filter(x=>x.date.startsWith(m)).sort((a,b)=>b.date.localeCompare(a.date)||b.created-a.created);$('historyList').innerHTML=a.length?a.map(itemHTML).join(''):'<div class="empty">ไม่มีรายการในเดือนนี้</div>'}
-function renderReport(){if(!$('reportMonth'))return;const m=$('reportMonth').value||monthNow(),a=entries.filter(x=>x.date.startsWith(m));const inc=sum(a,'income'),out=sum(a,'expense');$('reportIncome').textContent=money(inc);$('reportExpense').textContent=money(out);$('reportNet').textContent=money(inc-out);const totals={};a.filter(x=>x.type==='expense').forEach(x=>totals[x.category]=(totals[x.category]||0)+x.amount);const rows=Object.entries(totals).sort((a,b)=>b[1]-a[1]);$('categoryReport').innerHTML=rows.length?rows.map(([k,v])=>`<div class="item"><div class="item-info"><strong>${esc(k)}</strong></div><div class="item-amount expense">${money(v)}</div></div>`).join(''):'<div class="empty">ยังไม่มีรายจ่ายในเดือนนี้</div>'}
-function deleteEntry(id){if(confirm('ต้องการลบรายการนี้ใช่ไหม?')){entries=entries.filter(x=>x.id!==id);save()}}
-$('entryForm').addEventListener('submit',e=>{e.preventDefault();const amount=Number($('amount').value);if(!Number.isFinite(amount)||amount<=0)return alert('กรุณากรอกจำนวนเงินให้ถูกต้อง');entries.push({id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),type,amount,category:$('category').value,date:$('date').value,memo:$('memo').value.trim(),created:Date.now()});save();$('entryForm').reset();$('date').value=today();setType(type);showView('home');alert('บันทึกรายการเรียบร้อย')});
-function exportData(){const blob=new Blob([JSON.stringify({app:'MONEY Love',version:1,entries},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='money-love-backup-'+today()+'.json';a.click();URL.revokeObjectURL(a.href)}
-$('importFile').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());if(!Array.isArray(d.entries)||!d.entries.every(x=>['income','expense'].includes(x.type)&&Number(x.amount)>0&&x.date&&x.category))throw Error();if(confirm('นำเข้าข้อมูลและแทนที่รายการเดิมในเครื่องนี้?')){entries=d.entries;save();alert('นำเข้าข้อมูลเรียบร้อย')}}catch(err){alert('ไฟล์ไม่ถูกต้องหรือไม่ใช่ไฟล์สำรอง MONEY Love')}e.target.value=''});
-function clearData(){if(confirm('ยืนยันลบรายการทั้งหมดในเครื่องนี้? การลบไม่สามารถย้อนกลับได้')){entries=[];save();alert('ลบข้อมูลแล้ว')}}
-$('filterMonth').value=monthNow();$('reportMonth').value=monthNow();$('date').value=today();setType('income');render();
-if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
+  $(id).classList.add("active");
+  render();
+}
+function updateCategories(){
+  const type=$("type").value;
+  $("category").innerHTML=categories[type].map(c=>`<option>${c}</option>`).join("");
+}
+$("type").addEventListener("change",updateCategories);
+
+function totals(list){
+  return list.reduce((a,x)=>{
+    if(x.type==="income") a.income+=Number(x.amount);
+    else a.expense+=Number(x.amount);
+    return a;
+  },{income:0,expense:0});
+}
+function safe(s){
+  return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function entryHTML(x){
+  const isIn=x.type==="income";
+  return `<div class="item">
+    <div style="min-width:0">
+      <b>${safe(x.category)}</b>
+      <small>${safe(x.date)} ${x.note?"· "+safe(x.note):""}</small>
+      <div class="actions">
+        <button class="secondary" onclick="editEntry('${x.id}')">แก้ไข</button>
+        <button class="danger" onclick="deleteEntry('${x.id}')">ลบ</button>
+      </div>
+    </div>
+    <div class="amount ${isIn?"green":"red"}">${isIn?"+":"-"}฿${money(x.amount)}</div>
+  </div>`;
+}
+function renderHome(){
+  const t=totals(data.entries);
+  $("balance").textContent="฿"+money(t.income-t.expense);
+  const mt=totals(data.entries.filter(x=>monthOf(x.date)===monthNow()));
+  $("monthIncome").textContent="฿"+money(mt.income);
+  $("monthExpense").textContent="฿"+money(mt.expense);
+  const recent=[...data.entries].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5);
+  $("recent").innerHTML=recent.length?recent.map(entryHTML).join(""):'<div class="empty">ยังไม่มีรายการ ลองบันทึกรายการแรกกันครับ</div>';
+}
+function renderHistory(){
+  const m=$("historyMonth").value||monthNow();
+  const list=data.entries.filter(x=>monthOf(x.date)===m).sort((a,b)=>b.date.localeCompare(a.date));
+  $("historyList").innerHTML=list.length?list.map(entryHTML).join(""):'<div class="empty">ยังไม่มีรายการในเดือนนี้</div>';
+}
+function renderReport(){
+  const m=$("reportMonth").value||monthNow();
+  const list=data.entries.filter(x=>monthOf(x.date)===m);
+  const t=totals(list);
+  let html=`<div class="cards">
+    <div class="card"><small>รายรับ</small><strong class="green">฿${money(t.income)}</strong></div>
+    <div class="card"><small>รายจ่าย</small><strong class="red">฿${money(t.expense)}</strong></div>
+  </div><h3>สรุปรายจ่ายตามหมวดหมู่</h3>`;
+  const groups={};
+  list.filter(x=>x.type==="expense").forEach(x=>groups[x.category]=(groups[x.category]||0)+Number(x.amount));
+  const sorted=Object.entries(groups).sort((a,b)=>b[1]-a[1]);
+  if(!sorted.length) html+='<p class="empty">ยังไม่มีรายจ่ายในเดือนนี้</p>';
+  sorted.forEach(([name,value])=>{
+    const pct=t.expense?value/t.expense*100:0;
+    html+=`<div><b>${safe(name)}</b><span style="float:right">฿${money(value)}</span>
+    <div class="bar-bg"><div class="bar" style="width:${pct}%"></div></div></div>`;
+  });
+  html+=`<h3>เงินเหลือสุทธิเดือนนี้</h3><strong class="${t.income-t.expense>=0?"green":"red"}">฿${money(t.income-t.expense)}</strong>`;
+  $("reportContent").innerHTML=html;
+}
+function renderGoal(){
+  if(!data.goal){$("goalDisplay").innerHTML='<p class="muted">ยังไม่ได้ตั้งเป้าหมายการออม</p>';return;}
+  const g=data.goal;
+  const pct=Math.min(100,g.target?g.saved/g.target*100:0);
+  $("goalDisplay").innerHTML=`<b>${safe(g.name)}</b>
+  <p>ออมแล้ว ฿${money(g.saved)} / ฿${money(g.target)}</p>
+  <div class="goal-progress"><div style="width:${pct}%"></div></div>
+  <small>${pct.toFixed(1)}% ของเป้าหมาย</small>`;
+}
+function renderBudget(){
+  const m=monthNow();
+  const list=data.entries.filter(x=>monthOf(x.date)===m&&x.type==="expense");
+  const groups={};
+  list.forEach(x=>groups[x.category]=(groups[x.category]||0)+Number(x.amount));
+  const budgets=data.budgets||{};
+  const keys=Object.keys(budgets);
+  $("budgetDisplay").innerHTML=keys.length?keys.map(c=>{
+    const spent=groups[c]||0, limit=Number(budgets[c]);
+    const pct=limit?Math.min(100,spent/limit*100):0;
+    return `<div style="margin:12px 0"><b>${safe(c)}</b>
+    <span style="float:right">฿${money(spent)} / ฿${money(limit)}</span>
+    <div class="bar-bg"><div class="bar" style="width:${pct}%;background:${spent>limit?"#e05252":"#1769d2"}"></div></div>
+    <button class="danger" onclick="deleteBudget('${safe(c)}')">ลบงบประมาณ</button></div>`;
+  }).join(""):'<p class="muted">ยังไม่ได้ตั้งงบประมาณ</p>';
+}
+function render(){
+  renderHome();renderHistory();renderReport();renderGoal();renderBudget();
+}
+$("entryForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const amount=Number($("amount").value);
+  if(!Number.isFinite(amount)||amount<=0){alert("กรุณากรอกจำนวนเงินให้ถูกต้อง");return;}
+  const entry={
+    id:editingId||String(Date.now()),
+    type:$("type").value,amount,
+    category:$("category").value,
+    date:$("date").value,
+    note:$("note").value.trim()
+  };
+  if(editingId){
+    data.entries=data.entries.map(x=>x.id===editingId?entry:x);
+  }else data.entries.push(entry);
+  saveData();resetForm();showPage("home");
+});
+function editEntry(id){
+  const x=data.entries.find(x=>x.id===id);
+  if(!x)return;
+  editingId=id;
+  $("type").value=x.type;updateCategories();
+  $("amount").value=x.amount;$("category").value=x.category;
+  $("date").value=x.date;$("note").value=x.note||"";
+  $("formTitle").textContent="แก้ไขรายการ";
+  $("cancelEdit").style.display="block";
+  showPage("add");
+}
+function deleteEntry(id){
+  if(!confirm("ต้องการลบรายการนี้ใช่ไหม?"))return;
+  data.entries=data.entries.filter(x=>x.id!==id);
+  saveData();render();
+}
+function resetForm(){
+  editingId=null;$("entryForm").reset();
+  $("date").value=today();$("type").value="income";
+  updateCategories();$("formTitle").textContent="บันทึกรายการใหม่";
+  $("cancelEdit").style.display="none";
+}
+function saveGoal(){
+  const name=$("goalName").value.trim();
+  const target=Number($("goalTarget").value);
+  const saved=Number($("goalSaved").value);
+  if(!name||target<=0||saved<0){alert("กรุณากรอกข้อมูลเป้าหมายให้ถูกต้อง");return;}
+  data.goal={name,target,saved};saveData();renderGoal();
+  alert("บันทึกเป้าหมายแล้ว");
+}
+function saveBudget(){
+  const c=$("budgetCategory").value;
+  const amount=Number($("budgetAmount").value);
+  if(!c||amount<=0){alert("กรุณากรอกงบประมาณให้ถูกต้อง");return;}
+  data.budgets=data.budgets||{};
+  data.budgets[c]=amount;saveData();renderBudget();
+  $("budgetAmount").value="";
+  alert("บันทึกงบประมาณแล้ว");
+}
+function deleteBudget(c){
+  if(!confirm("ต้องการลบงบประมาณนี้ใช่ไหม?"))return;
+  delete data.budgets[c];saveData();renderBudget();
+}
+function backup(){
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;a.download="MONEY-Love-backup.json";a.click();
+  URL.revokeObjectURL(url);
+}
+function restore(){
+  const file=$("restoreFile").files[0];
+  if(!file){alert("กรุณาเลือกไฟล์สำรองก่อน");return;}
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const imported=JSON.parse(reader.result);
+      if(!imported||!Array.isArray(imported.entries))throw Error();
+      if(!confirm("การนำเข้าจะเขียนทับข้อมูลปัจจุบัน ต้องการดำเนินการต่อไหม?"))return;
+      data={entries:imported.entries,goal:imported.goal||null,budgets:imported.budgets||{}};
+      saveData();render();alert("นำเข้าข้อมูลสำเร็จ");
+    }catch(e){alert("ไฟล์ไม่ถูกต้องหรือไม่ใช่ไฟล์สำรอง MONEY Love");}
+  };
+  reader.readAsText(file);
+}
+$("historyMonth").value=monthNow();
+$("reportMonth").value=monthNow();
+$("historyMonth").addEventListener("change",renderHistory);
+$("reportMonth").addEventListener("change",renderReport);
+$("budgetCategory").innerHTML=categories.expense.map(c=>`<option>${c}</option>`).join("");
+resetForm();
+render();
+
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>{
+    navigator.serviceWorker.register("./sw.js").catch(()=>{});
+  });
+}
 </script>
-</body></html>
+</body>
+</html>
